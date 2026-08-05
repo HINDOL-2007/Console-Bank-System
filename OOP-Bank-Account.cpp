@@ -9,7 +9,6 @@ private:
     string pin;
     double balance = 0.0;
     bool check_pin();
-
 public:
     void setup_account(string name, string number, string user_pin);
     void deposit(double amount);
