@@ -6,17 +6,26 @@ class BankAccount
 private:
     string accountHolderName;
     string accountNumber;
+    string pin;
     double balance = 0.0;
+    bool check_pin();
+
 public:
-    void setup_account(string name, string number);
+    void setup_account(string name, string number, string user_pin);
     void deposit(double amount);
     void withdraw(double amount);
     void display();
 };
-void BankAccount ::setup_account(string name, string number)
+void BankAccount ::setup_account(string name, string number, string user_pin)
 {
     accountHolderName = name;
     accountNumber = number;
+    pin = user_pin ;
+    while(pin.length() != 4){
+        cout<<"PIN should be 4 digits long. Please set a valid PIN."<<endl;
+        cout << "Enter your PIN : ";
+        cin >> pin;
+    }
 }
 void BankAccount ::deposit(double amount)
 {
@@ -24,13 +33,21 @@ void BankAccount ::deposit(double amount)
 }
 void BankAccount ::withdraw(double amount)
 {
-    if (amount > balance)
+    if (check_pin() == true)
     {
-        cout << "Insufficient balance" << endl;
+
+        if (amount > balance)
+        {
+            cout << "Insufficient balance" << endl;
+        }
+        else
+        {
+            balance -= amount;
+        }
     }
     else
     {
-        balance -= amount;
+        cout << "Incorrect PIN" << endl;
     }
 }
 void BankAccount ::display()
@@ -38,6 +55,20 @@ void BankAccount ::display()
     cout << "Account Holder Name: " << accountHolderName << endl;
     cout << "Account Number: " << accountNumber << endl;
     cout << "Balance: " << balance << endl;
+}
+bool BankAccount ::check_pin()
+{
+    string entered_pin;
+    cout << "Enter your PIN: ";
+    cin >> entered_pin;
+    if (entered_pin == pin)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 int main()
 {
@@ -49,12 +80,14 @@ int main()
     cin.ignore(); // To ignore the newline character left in the input buffer after reading 'a'
     if (a == 1 || a == 2)
     {
-        string name, number;
+        string name, number, set_pin;
         cout << "Enter your account holder name : ";
         getline(cin, name);
         cout << "Enter your account number : ";
         cin >> number;
-        my_account.setup_account(name, number);
+        cout << "Enter your PIN : ";
+        cin >> set_pin;
+        my_account.setup_account(name, number, set_pin);
     }
     else
     {
@@ -73,7 +106,7 @@ int main()
         switch (choice)
         {
         case 1:
-        {//use braces to create a new scope for the variable deposit_amount
+        { // use braces to create a new scope for the variable deposit_amount
             double deposit_amount;
             cout << "Enter the amount you want to deposite :- ";
             cin >> deposit_amount;
